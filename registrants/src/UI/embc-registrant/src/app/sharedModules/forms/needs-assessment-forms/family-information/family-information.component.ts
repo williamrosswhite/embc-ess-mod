@@ -28,7 +28,7 @@ import { InformationDialogComponent } from 'src/app/core/components/dialog-compo
 })
 export default class FamilyInformationComponent implements OnInit {
   householdMemberForm: UntypedFormGroup;
-  radioOption = globalConst.radioButton1;
+  booleanOptions = globalConst.booleanOptions;
   formBuilder: UntypedFormBuilder;
   householdMemberForm$: Subscription;
   formCreationService: FormCreationService;
@@ -160,11 +160,6 @@ export default class FamilyInformationComponent implements OnInit {
       .updateValueAndValidity();
   }
 
-  hasSpecialDietChange(event: MatRadioChange): void {
-    if (event.value === false) {
-      this.householdMemberForm.get('specialDietDetails').reset();
-    }
-  }
 }
 
 @NgModule({
@@ -180,6 +175,7 @@ export default class FamilyInformationComponent implements OnInit {
     MatTableModule,
     MatIconModule
   ],
-  declarations: [FamilyInformationComponent]
+  declarations: [FamilyInformationComponent],
+  exports: [FamilyInformationComponent]
 })
-class FamilyInformationModule {}
+export class FamilyInformationModule {}

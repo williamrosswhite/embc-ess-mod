@@ -32,12 +32,8 @@ export class NeedsAssessmentMappingService {
     this.setNeedsAssessmentId(needsAssessment.id);
     this.setInsurance(evacuatedAddress, needsAssessment.insurance);
     this.setFamilyMedicationDiet(
-      needsAssessment.haveMedication,
-      needsAssessment.haveSpecialDiet,
-      needsAssessment.householdMembers,
-      needsAssessment.specialDietDetails
+      needsAssessment.householdMembers
     );
-    this.setPets(needsAssessment.pets, needsAssessment.hasPetsFood);
     this.setIdentifiedNeeds(
       needsAssessment.canEvacueeProvideClothing,
       needsAssessment.canEvacueeProvideFood,
@@ -71,14 +67,8 @@ export class NeedsAssessmentMappingService {
   }
 
   setFamilyMedicationDiet(
-    haveMedication: boolean,
-    haveSpecialDiet: boolean,
-    householdMembers: Array<HouseholdMember>,
-    specialDietDetails: string
+    householdMembers: Array<HouseholdMember>
   ): void {
-    this.needsAssessmentService.haveMedication = haveMedication;
-    this.needsAssessmentService.haveSpecialDiet = haveSpecialDiet;
-    this.needsAssessmentService.specialDietDetails = specialDietDetails;
     this.needsAssessmentService.householdMembers = householdMembers;
 
     this.formCreationService
@@ -86,9 +76,6 @@ export class NeedsAssessmentMappingService {
       .pipe(first())
       .subscribe((details) => {
         details.setValue({
-          haveMedication,
-          haveSpecialDiet,
-          specialDietDetails,
           householdMembers:
             this.convertVerifiedHouseholdMembers(householdMembers),
           householdMember: {
@@ -105,10 +92,8 @@ export class NeedsAssessmentMappingService {
       });
   }
 
-  setPets(pets: Array<Pet>, hasPetsFood: boolean): void {
-    this.needsAssessmentService.hasPetsFood = hasPetsFood;
+  setPets(pets: Array<Pet>): void {
     this.needsAssessmentService.pets = pets;
-
     this.formCreationService
       .getPetsForm()
       .pipe(first())
@@ -119,9 +104,7 @@ export class NeedsAssessmentMappingService {
             quantity: '',
             type: ''
           },
-          addPetIndicator: null,
-          hasPetsFood,
-          addPetFoodIndicator: null
+          addPetIndicator: null
         });
       });
   }
@@ -134,29 +117,29 @@ export class NeedsAssessmentMappingService {
     canEvacueeProvideTransportation: boolean
   ): void {
     this.needsAssessmentService.canEvacueeProvideFood =
-      globalConst.needsOptions.find(
-        (ins) => ins.apiValue === canEvacueeProvideFood
-      )?.value;
+      globalConst.booleanOptions.find(
+        (ins) => ins.value === canEvacueeProvideFood
+      )?.name;
 
     this.needsAssessmentService.canEvacueeProvideLodging =
-      globalConst.needsOptions.find(
-        (ins) => ins.apiValue === canEvacueeProvideLodging
-      )?.value;
+      globalConst.booleanOptions.find(
+        (ins) => ins.value === canEvacueeProvideLodging
+      )?.name;
 
     this.needsAssessmentService.canEvacueeProvideClothing =
-      globalConst.needsOptions.find(
-        (ins) => ins.apiValue === canEvacueeProvideClothing
-      )?.value;
+      globalConst.booleanOptions.find(
+        (ins) => ins.value === canEvacueeProvideClothing
+      )?.name;
 
     this.needsAssessmentService.canEvacueeProvideTransportation =
-      globalConst.needsOptions.find(
-        (ins) => ins.apiValue === canEvacueeProvideTransportation
-      )?.value;
+      globalConst.booleanOptions.find(
+        (ins) => ins.value === canEvacueeProvideTransportation
+      )?.name;
 
     this.needsAssessmentService.canEvacueeProvideIncidentals =
-      globalConst.needsOptions.find(
-        (ins) => ins.apiValue === canEvacueeProvideIncidentals
-      )?.value;
+      globalConst.booleanOptions.find(
+        (ins) => ins.value === canEvacueeProvideIncidentals
+      )?.name;
 
     this.formCreationService
       .getIndentifyNeedsForm()

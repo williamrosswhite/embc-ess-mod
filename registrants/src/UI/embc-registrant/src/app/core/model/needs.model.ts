@@ -43,18 +43,12 @@ export class EvacuatedForm {
 }
 
 export class HouseholdMembers {
-  haveMedication: boolean;
-  haveSpecialDiet: boolean;
-  specialDietDetails: string;
   householdMembers: Array<HouseholdMember>;
 
   constructor() {}
 }
 
 export class HouseholdMembersForm {
-  haveMedication = new UntypedFormControl();
-  haveSpecialDiet = new UntypedFormControl();
-  specialDietDetails = new UntypedFormControl();
   householdMember: UntypedFormGroup;
   householdMembers = new UntypedFormControl([]);
   addHouseholdMemberIndicator = new UntypedFormControl(false);
@@ -119,22 +113,12 @@ export class HouseholdMembersForm {
       ],
       isPrimaryRegistrant: ['']
     });
-
-    // this.specialDietDetails.setValidators([
-    //   customValidator
-    //     .conditionalValidation(
-    //       () => this.haveSpecialDiet.value,
-    //       Validators.required
-    //     )
-    //     .bind(customValidator)
-    // ]);
   }
 }
 
 export class Pet {
   quantity: number;
   type: string;
-  hasPetsFood: boolean;
 
   constructor() {}
 }
@@ -143,8 +127,6 @@ export class PetForm {
   pets = new UntypedFormControl([]);
   pet: UntypedFormGroup;
   addPetIndicator = new UntypedFormControl(false);
-  hasPetsFood = new UntypedFormControl();
-  addPetFoodIndicator = new UntypedFormControl(false);
 
   constructor(
     pet: Pet,
@@ -177,15 +159,6 @@ export class PetForm {
       ]
     });
 
-    this.hasPetsFood.setValue(pet.hasPetsFood);
-    this.hasPetsFood.setValidators([
-      customValidator
-        .conditionalValidation(
-          () => this.addPetFoodIndicator.value,
-          Validators.required
-        )
-        .bind(customValidator)
-    ]);
   }
 }
 
@@ -194,7 +167,8 @@ export class IdentifyNeeds {
   canEvacueeProvideFood: boolean;
   canEvacueeProvideIncidentals: boolean;
   canEvacueeProvideLodging: boolean;
-  canEvacueeProvideTransportation: boolean;
+  shelterOptions: boolean;
+  doesEvacueeNotRequireAssistance: boolean;
 }
 
 export class IdentifyNeedsForm {
@@ -202,31 +176,34 @@ export class IdentifyNeedsForm {
   canEvacueeProvideFood = new UntypedFormControl();
   canEvacueeProvideIncidentals = new UntypedFormControl();
   canEvacueeProvideLodging = new UntypedFormControl();
-  canEvacueeProvideTransportation = new UntypedFormControl();
+  shelterOptions = new UntypedFormControl();
+  doesEvacueeNotRequireAssistance = new UntypedFormControl();
 
   constructor(identifyNeeds: IdentifyNeeds) {
     this.canEvacueeProvideClothing.setValue(
-      identifyNeeds.canEvacueeProvideClothing
-    );
+      identifyNeeds.canEvacueeProvideClothing?? false);
     this.canEvacueeProvideClothing.setValidators([Validators.required]);
+    this.canEvacueeProvideIncidentals.setErrors({ 'error': true });
 
-    this.canEvacueeProvideFood.setValue(identifyNeeds.canEvacueeProvideFood);
-    this.canEvacueeProvideFood.setValidators([Validators.required]);
+    this.canEvacueeProvideFood.setValue(
+      identifyNeeds.canEvacueeProvideFood ?? false);
+    this.canEvacueeProvideFood.setValidators([Validators.required]);  
+    this.canEvacueeProvideIncidentals.setErrors({ 'error': true });
 
     this.canEvacueeProvideIncidentals.setValue(
-      identifyNeeds.canEvacueeProvideIncidentals
-    );
+      identifyNeeds.canEvacueeProvideIncidentals ?? false);
     this.canEvacueeProvideIncidentals.setValidators([Validators.required]);
+    this.canEvacueeProvideIncidentals.setErrors({ 'error': true });
 
     this.canEvacueeProvideLodging.setValue(
-      identifyNeeds.canEvacueeProvideLodging
-    );
-    this.canEvacueeProvideLodging.setValidators([Validators.required]);
+      identifyNeeds.canEvacueeProvideLodging ?? false);
+    this.canEvacueeProvideLodging.setValidators([Validators.required]);  
+    this.canEvacueeProvideIncidentals.setErrors({ 'error': true });
 
-    this.canEvacueeProvideTransportation.setValue(
-      identifyNeeds.canEvacueeProvideTransportation
-    );
-    this.canEvacueeProvideTransportation.setValidators([Validators.required]);
+    this.shelterOptions.setValue(identifyNeeds.shelterOptions);
+
+    this.doesEvacueeNotRequireAssistance.setValue(null);
+    this.doesEvacueeNotRequireAssistance.setValidators([Validators.required]);
   }
 }
 
